@@ -14,7 +14,12 @@ This project aims to visualize ancient Identity by Descent (IBD) connections usi
 
 The data used in this project can be found here: [IBD Data](https://zenodo.org/records/8417049)
 
-# Software used and dependencies
+The dataset contains identity by descent (IBD) segments identified in 4,248 ancient individuals. 
+
+Each row represents an genomic segment shared between two individuals that is inherited from a common ancestor.  
+
+
+# Software used and Dependencies
 
 
 # Scripts
