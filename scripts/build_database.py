@@ -13,6 +13,9 @@ This script combines the three parsed output files (aadr_data.txt, metadata.txt,
 into a single SQLite database with a table that contains the IBD connections between 
 individuals, along with their group information.
 
+User-defined functions: get_arguments(), add_group_column(), main()
+Non-standard modules: pandas, sqlite3
+
 Table:
 - `ibd_connections` [default name]: 
 This table contains the IBD connections between individuals,
