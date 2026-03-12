@@ -24,10 +24,13 @@ Lastly, the AADR (Ancient Admixture and Relatedness) data, which informs about t
 
 # Software used and Dependencies
 
+Python version 3.10 or higher is required to run the scripts in this project.
+
 Need to install the following Python libraries:
 - pandas
 - openpyxl
-- sqlite3
+- pycirclize
+
 
 # Scripts
 
