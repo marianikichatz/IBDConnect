@@ -102,47 +102,67 @@ def parse_aadr_data(input_file):
     df = pd.read_excel(input_file, header=header_row)
 
     # check if required columns are here
-    required_columns = ['Master ID', 'Group ID']
+    required_columns = ['Master ID', 'Group ID', 'Political Entity']
 
     for column in required_columns:
         column = column.strip().lower() # remove leading and trailing whitespaces and make lowercase
         if column not in df.columns.str.strip().str.lower():
             raise ValueError(f"The input file must contain the following columns: {', '.join(required_columns)}. Please provide a valid input file. Thank you!")
-        
+
+    # find the BP date column by searching for the column that starts with 'Date mean in BP'
+    date_col = None
+    for col in df.columns:
+        if str(col).strip().startswith('Date mean in BP'):
+            date_col = col
+            break
+    
+    if date_col is None:
+        raise ValueError("Could not find the 'Date mean in BP' column in the input file. Please provide a valid input file. Thank you!")
+
     master_id = df['Master ID'] # get the Master ID column from the dataframe
     group_id = df['Group ID'] # get the Group ID column from the dataframe
+    country = df['Political Entity'] # get the country column from the dataframe
+    
+    # convert BP (years before 1950) to actual year: actual_year = 1950 - BP
+    # negative values mean BCE, positive mean CE
+    date_bp = pd.to_numeric(df[date_col], errors='coerce')
+    year = 1950 - date_bp
 
     # create a dictionary to store the parsed AADR data
     aadr_dict = {}
 
-    # loop through the rows of the dataframe and add the master id and group id to the dictionary
+    # loop through the rows of the dataframe and add the master id, group id, country and year to the dictionary
     for i in range(len(master_id)):
-        aadr_dict[master_id[i]] = group_id[i] 
+        aadr_dict[master_id[i]] = {'Group ID': group_id[i], 'country': country[i], 'year': year[i]}
     
     return aadr_dict
 
 # function to write the output to a file
 def write_output(aadr_dict, output_file):
     with open(output_file, 'w') as f:
-        f.write("Master ID\tGroup ID\n") # write the header
-        for master_id, group_id in aadr_dict.items():
-            f.write(f"{master_id}\t{group_id}\n") # write the master id and group id to the output file
+        f.write("Master ID\tGroup ID\tcountry\tyear\n") # write the header
+        for master_id, values in aadr_dict.items():
+            f.write(f"{master_id}\t{values['Group ID']}\t{values['country']}\t{values['year']}\n") # write the data
     
     return output_file
 
 # main function:
 def main():
+    try:
+        # first get the arguments from the command line
+        script_name, input_file, output_file = get_arguments()
 
-    # first get the arguments from the command line
-    script_name, input_file, output_file = get_arguments()
+        # we parse the AADR data and get the group id for every master id
+        aadr_dict = parse_aadr_data(input_file)
 
-    # we parse the AADR data and get the group id for every master id
-    aadr_dict = parse_aadr_data(input_file)
+        # write the output file
+        output_file = write_output(aadr_dict, output_file)
 
-    # write the output file
-    output_file = write_output(aadr_dict, output_file)
+        print(f"The AADR data was successfully parsed and written to {output_file}. It can be found in the results/parse_aadr directory. Thank you for using this script!")
 
-    print(f"The AADR data was successfully parsed and written to {output_file}. It can be found in the results/parse_aadr directory. Thank you for using this script!")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

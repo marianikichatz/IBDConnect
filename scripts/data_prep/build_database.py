@@ -19,7 +19,7 @@ Non-standard modules: pandas, sqlite3
 Table:
 - `ibd_connections` [default name]: 
 This table contains the IBD connections between individuals,
-with columns for ind1, group1, ind2, group2, and lengthM. 
+with columns for ind1, group1, country1, year1, ind2, group2, country2, year2, and lengthM. 
 
 Usage:
 python build_database.py table_name[optional] or
@@ -83,8 +83,8 @@ def get_arguments():
 		
 	return input_files, table_name, script_name
 
-# function for one individual column and to add its group column
-def add_group_column(ibd_df, metadata_df, aadr_df, individual, group_column):
+# function for one individual column and to add its group, country and year columns
+def add_group_column(ibd_df, metadata_df, aadr_df, individual, group_column, country_column, year_column):
 
 	column = f"{individual}" # name of the column with the individual (ind1 or ind2)
 	column_master_id = f"{individual}_master_id" # name of the column with the Master ID for the individual
@@ -100,13 +100,13 @@ def add_group_column(ibd_df, metadata_df, aadr_df, individual, group_column):
 	# we drop the ind column as we have the specific individual column 
 	df = df.drop(columns=['ind'])
 
-	# merge the df with the aadr data to get the group information for each individual
+	# merge the df with the aadr data to get the group, country and year for each individual
 	# we merge on the Master ID column for the individual and the 'Master ID' column in the aadr data
 	# we keep all rows from the ibd data even if we don't find a match in the aadr data
 	df = df.merge(aadr_df, left_on=column_master_id, right_on='Master ID', how='left')
 
-	# rename the Group ID column to be specific for the individual 
-	df = df.rename(columns={'Group ID': group_column})
+	# rename the Group ID, country and year columns to be specific for the individual 
+	df = df.rename(columns={'Group ID': group_column, 'country': country_column, 'year': year_column})
 
 	# we drop the Master ID column as we have the specific group column
 	df = df.drop(columns=['Master ID', column_master_id])
@@ -129,12 +129,12 @@ def main():
 		metadata_df = pd.read_csv(input_files['metadata_file'], sep='\t')
 		ibd_df = pd.read_csv(input_files['ibd_file'], sep='\t')
 
-		# add group information for ind1 and ind2
-		merged = add_group_column(ibd_df, metadata_df, aadr_df, 'ind1', 'group1')
-		merged = add_group_column(merged, metadata_df, aadr_df, 'ind2', 'group2')
+		# add group, country and year information for ind1 and ind2
+		merged = add_group_column(ibd_df, metadata_df, aadr_df, 'ind1', 'group1', 'country1', 'year1')
+		merged = add_group_column(merged, metadata_df, aadr_df, 'ind2', 'group2', 'country2', 'year2')
 
 		# keep only the columns we need
-		merged = merged[['ind1', 'group1', 'ind2', 'group2', 'lengthM']]
+		merged = merged[['ind1', 'group1', 'country1', 'year1', 'ind2', 'group2', 'country2', 'year2', 'lengthM']]
 
 		print(f"Combined table has {len(merged)} rows")
 
@@ -145,11 +145,16 @@ def main():
 		conn.close()
 
 		# if there are any missing info we print a message regarding that and how many individuals have missing info
-		if merged['group1'].isnull().sum() + merged['group2'].isnull().sum() > 0: 
-			missing_rows = merged['group1'].isnull().sum() + merged['group2'].isnull().sum()
-			print(f"There is some missing group information for some individuals in the database.\n"
-				"This is because we don't have group information for all individuals in the AADR data. They are shown as NULL in the database.\n"
-				f"The number of rows with missing group information is {missing_rows}.")
+		missing_group = merged['group1'].isnull().sum() + merged['group2'].isnull().sum()
+		missing_country = merged['country1'].isnull().sum() + merged['country2'].isnull().sum()
+		missing_year = merged['year1'].isnull().sum() + merged['year2'].isnull().sum()
+
+		if missing_group + missing_country + missing_year > 0:
+			print(
+				f"There is some missing information for some individuals in the database.\n"
+				"This is because we don't have complete data for all individuals in the AADR data. They are shown as NULL in the database.\n"
+				f"Rows with missing group: {missing_group} | missing country: {missing_country} | missing year: {missing_year}."
+			)
 
 		print(f"Database successfully created at {table_name}.db\nThank you for using the script!")
 

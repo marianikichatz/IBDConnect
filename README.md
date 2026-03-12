@@ -30,20 +30,20 @@ Need to install the following Python libraries:
 - pandas
 - openpyxl
 - pycirclize
-
+- matplotlib
 
 # Scripts
 
 - `parse_ibd.py`: A Python script that parses the IBD data and extracts the pairs of individuals and their corresponding IBD segment lengths in centiMorgans (cM). The script takes an input TSV file containing the IBD data and produces an output file with the parsed information.
 - `parse_metadata.py`: A Python script that parses the metadata and finds the master id for each individual. The script takes an input Excel file containing the metadata and produces an output file with the parsed information.
-- `parse_aadr.py`: A Python script that parses the AADR data and converts it into a format with information about individuals and their populations. The script takes an input Excel file containing the AADR data and produces an output file with the parsed information.
-- `build_database.py`: A Python script that takes the parsed IBD, metadata, and AADR files and builds a SQLite database. The script merges the information from the three input files based on the individual IDs and creates a database with a table containing the columns: ind1, group1, ind2, group2, and lengthM.
+- `parse_aadr.py`: A Python script that parses the AADR data and converts it into a format with information about individuals and their population, country and year. The script takes an input Excel file containing the AADR data and produces an output file with the parsed information.
+- `build_database.py`: A Python script that takes the parsed IBD, metadata, and AADR files and builds a SQLite database. The script merges the information from the three input files based on the individual IDs and creates a database with a table containing the columns: ind1, group1, country1, year1, ind2, group2, country2, year2, and lengthM.
 
 # Workflow
 
 1. Run `parse_ibd.py` to parse the IBD data and create an output file with the relevant information.
 2. Run `parse_metadata.py` to parse the metadata and create an output file with the master IDs for each individual.
-3. Run `parse_aadr.py` to parse the AADR data and create an output file with the population information for each individual.
+3. Run `parse_aadr.py` to parse the AADR data and create an output file with the population, country and year information for each individual.
 4. Run `build_database.py` to merge the parsed IBD, metadata, and AADR files and create a SQLite database with the combined information.    
 
 
