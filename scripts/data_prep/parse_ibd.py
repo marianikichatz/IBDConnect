@@ -19,7 +19,7 @@ and outputs a file that can be used for further analysis.
 Procedure:
 1. Read command line arguments  
 2. Parse the IBD data
-3. Write the output file with the pairs and their lengths in cM
+3. Write a tab seperated output file with the pairs and their lengths in cM
 
 User-defined functions: get_arguments(), parse_ibd(), write_output(), main()
 Non-standard modules: pandas

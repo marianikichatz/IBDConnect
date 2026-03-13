@@ -16,6 +16,9 @@ and converts it into a format with information about individuals and their popul
 The script reads the AADR data, processes it, and outputs a file that can be used for further analysis.
 
 Procedure:
+1. Read command line arguments to get the input file and output file paths
+2. Parse the AADR data to extract Master ID, Group ID, country, and year
+3. Write the parsed data to a tab separated output file
 
 Input:
 - `input_file`: The path to the input Excel file containing AADR data. [Example: aadr.xlsx]

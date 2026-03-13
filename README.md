@@ -1,4 +1,4 @@
-# Project: Visualize ancient IBD connections using circus plots 
+# Project: Visualize ancient IBD connections using circos plots 
 
 *Author: Maria Niki Chatzantoni*
 
@@ -8,7 +8,7 @@
 
 # Scope 
 
-This project aims to visualize ancient Identity by Descent (IBD) connections using circus plots. IBD refers to segments of DNA that are inherited from a common ancestor, and visualizing these connections can provide insights into population history and genetic relationships.
+This project aims to visualize ancient Identity by Descent (IBD) connections using circos plots. IBD refers to segments of DNA that are inherited from a common ancestor, and visualizing these connections can provide insights into population history and genetic relationships.
 
 # Data
 
@@ -38,13 +38,15 @@ Need to install the following Python libraries:
 - `parse_metadata.py`: A Python script that parses the metadata and finds the master id for each individual. The script takes an input Excel file containing the metadata and produces an output file with the parsed information.
 - `parse_aadr.py`: A Python script that parses the AADR data and converts it into a format with information about individuals and their population, country and year. The script takes an input Excel file containing the AADR data and produces an output file with the parsed information.
 - `build_database.py`: A Python script that takes the parsed IBD, metadata, and AADR files and builds a SQLite database. The script merges the information from the three input files based on the individual IDs and creates a database with a table containing the columns: ind1, group1, country1, year1, ind2, group2, country2, year2, and lengthM.
+- `circos_plot.py`: A Python script that reads the SQLite database created by `build_database.py` and generates circos plots to visualize the IBD connections between individuals and populations. The script allows for filtering the connections based on various criteria such as population, country, year, and minimum IBD segment length.
 
 # Workflow
 
 1. Run `parse_ibd.py` to parse the IBD data and create an output file with the relevant information.
 2. Run `parse_metadata.py` to parse the metadata and create an output file with the master IDs for each individual.
 3. Run `parse_aadr.py` to parse the AADR data and create an output file with the population, country and year information for each individual.
-4. Run `build_database.py` to merge the parsed IBD, metadata, and AADR files and create a SQLite database with the combined information.    
+4. Run `build_database.py` to merge the parsed IBD, metadata, and AADR files and create a SQLite database with the combined information.
+5. `circos_plot.py` contains the functions used to read the database, filter the data, and generate the circos plots. These functions are imported and used by the Streamlit app.
 
 
 

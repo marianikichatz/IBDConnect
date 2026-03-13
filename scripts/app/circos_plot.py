@@ -1,5 +1,9 @@
+#!/usr/bin/env python3
+
+# Documentation Section
+
 '''
-Script name: plotCircos.py
+Script name: circos_plot.py
 Version: 1.0
 Date: 2026-03-12
 Name: Maria Niki Chatzantoni
@@ -8,6 +12,12 @@ Description:
 This script creates interactive circos plots for the IBD connections between individuals/populations in the database.
 Users can select specific populations or individuals, adjust connection thresholds, and generate circos plots.
 The script reads the database, filters data based on user input, and generates publication-quality circos plots.
+
+Procedure:
+1. Read the database
+2. Create matrices for individuals and populations
+3. Filter the matrices based on user selections 
+4. Create circos plots for the filtered data
 
 User-defined functions: parse_database(), filter_by_selection(), create_circos_plot()
 Non-standard modules: pycirclize, pandas, sqlite3, matplotlib
@@ -168,4 +178,5 @@ def create_circos_plot(filtered, mode):
     fig.tight_layout() # fix the layout to not have overlap 
 
     return fig
+
 

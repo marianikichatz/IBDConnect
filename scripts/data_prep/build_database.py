@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# Documentation Section
+
 '''
 
 Script name: build_database.py
@@ -12,6 +14,12 @@ Description:
 This script combines the three parsed output files (aadr_data.txt, metadata.txt, ibd_pairs_raw.txt)
 into a single SQLite database with a table that contains the IBD connections between 
 individuals, along with their group information.
+
+Procedure:
+1. Read command line arguments and check for input files
+2. Read the input files into pandas dataframes
+3. Merge the dataframes to combine the IBD connections with the group, country and year information for each individual
+4. Save the merged dataframe to a SQLite database
 
 User-defined functions: get_arguments(), add_group_column(), main()
 Non-standard modules: pandas, sqlite3
