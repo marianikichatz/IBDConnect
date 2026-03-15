@@ -37,11 +37,11 @@ import pandas as pd
 import sqlite3
 
 # function to read the database and make the matrices for individuals and populations
-def parse_database(input_file, min_length):
+def parse_database(input_file, min_length, table_name="ibd_connections"):
 
     # read the database file into a pandas dataframe
-    conn = sqlite3.connect(input_file, table_name="ibd_connections") 
-    query = "SELECT ind1, ind2, group1, group2, country1, year1, country2, year2, lengthM FROM {table_name}"
+    conn = sqlite3.connect(input_file)
+    query = f"SELECT ind1, ind2, group1, group2, country1, year1, country2, year2, lengthM FROM {table_name}"
     matrix = pd.read_sql_query(query, conn)
     conn.close()
 
