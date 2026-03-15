@@ -216,6 +216,10 @@ if generate:
 
         st.pyplot(fig)
 
+        fig.savefig("circos_plot.png", dpi=150, bbox_inches="tight")
+        with open("circos_plot.png", "rb") as f:
+            st.download_button("Download plot as PNG", f, "circos_plot.png", "image/png")
+
         # if there are too many connections we show a message to the user 
         if big:
             st.info(f"Too many connections!! Showing the top {max_nodes} nodes using '{ranking_method}'. "
