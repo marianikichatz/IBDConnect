@@ -146,6 +146,7 @@ def get_nodes(filtered, mode, selected_value, max_nodes, ranking_method):
     # combine the names from both columns
     all_names = pd.concat([names1, names2])
     nodes = sorted(all_names.unique()) # set the nodes as the unique names from both columns and sort them 
+    nodes = list(nodes)
 
 # if there are too many nodes we cut them to the max nodes
 
@@ -184,7 +185,7 @@ def create_circos_plot(filtered, mode, selected_value=None, max_nodes=50, rankin
 # if the mode is populations 
     if mode == "populations":
         # group by population pairs 
-        group_data = filtered.groupby(["group1", "group2"], as_index=False)
+        group_data = filtered.groupby(["group1", "group2", "country1", "country2"], as_index=False)
         # sum the lengthM to get the total IBD between each pair
         filtered = group_data["lengthM"].sum()
 
