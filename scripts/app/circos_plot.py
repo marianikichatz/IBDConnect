@@ -240,7 +240,7 @@ def create_circos_plot(filtered, mode, selected_value=None, max_nodes=50, rankin
 
     # create the circos plot
 
-    fig = plt.figure(figsize=(16, 16)) # set the figure size
+    fig = plt.figure(figsize=(16, 18)) # set the figure size
     ax = fig.add_subplot(111, projection="polar") # make the plot a circular plot 
 
     color_dict = {} # dictionary to store the color for each node
@@ -254,7 +254,7 @@ def create_circos_plot(filtered, mode, selected_value=None, max_nodes=50, rankin
     # make the circos plot using the pycirclize library
     circos = Circos.chord_diagram(matrix, space=space, cmap=color_dict, label_kws=dict(size=10, orientation="vertical"), link_kws=dict(lw=0, alpha=0.8))
     circos.plotfig(ax=ax) 
-    ax.set_title(f"IBD connections — colored by {group_label}", fontsize=14, fontweight="bold", pad=120) # set the title
+    ax.set_title(f"IBD connections — colored by {group_label}", fontsize=14, fontweight="bold", pad=200) # set the title
 
     fig.tight_layout()
 
