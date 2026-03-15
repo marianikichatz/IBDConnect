@@ -86,7 +86,8 @@ st.sidebar.title("Settings")
 st.sidebar.markdown("Use the options below to customize your visualization.")
 
 st.header("Welcome to IBDConnect!")
-st.info("To get started, make sure you have run the pipeline first to generate the database.\n\n"
+welcome = st.empty() # create an empty placeholder for the welcome message so we can remove it later 
+welcome.info("To get started, make sure you have run the pipeline first to generate the database.\n\n"
         "The database will be saved to `results/database/` by default.\n\n"
         "If you want to use your own database, change the path in the sidebar to point to your `.db` file "
         "and enter the name of the table containing your IBD connections.\n\n"
@@ -141,7 +142,8 @@ min_length = st.sidebar.slider("Minimum IBD segment length (cM)", min_value=leng
 try:
     # use the function to load the database with the minimum length filter
     matrix_ind, matrix_pop = load_filtered_database(database_path, min_length, table_name) 
-    st.success("Filtered database loaded successfully!")
+    succes_message =  st.empty() # create an empty placeholder for the success message so we can remove it later
+    succes_message.success("Filtered database loaded successfully!")
 # if there is an error loading the database show an error message
 except Exception as e: 
     st.error(f"Could not load the database: {e}")
@@ -185,6 +187,9 @@ generate = st.sidebar.button("Generate Circos Plot")
 # if the generate button is clicked we filter the data based on the user selections and generate the circos plot
 if generate:
     try:
+        welcome.empty() # clear the welcome message when generating the plot
+        succes_message.empty() # clear the success message when generating the plot
+
         # if the user selected individuals or populations we use them to filter
         if len(selected_values) > 0:
             use_value = selected_values
@@ -204,13 +209,14 @@ if generate:
 
         # show how many connections are being plotted
         st.write(f"Showing **{len(filtered)} IBD connections** for the selected filters.")
-
+        
         # create and display the circos plot
         with st.spinner("Generating circos plot, this may take a moment..."):
             fig, big, nodes, node_colors = create_circos_plot(filtered, mode, selected_value=use_value, max_nodes=max_nodes, ranking_method=ranking_method)
 
         st.pyplot(fig)
 
+        # if there are too many connections we show a message to the user 
         if big:
             st.info(f"Too many connections!! Showing the top {max_nodes} nodes using '{ranking_method}'. "
                     f"You can adjust the number of nodes or the ranking method in the sidebar and regenerate the plot.")

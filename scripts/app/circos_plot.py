@@ -191,7 +191,7 @@ def create_circos_plot(filtered, mode, selected_value=None, max_nodes=50, rankin
     # get the nodes to plot usin gthe function above
     nodes, filtered_data, big = get_nodes(filtered, mode, selected_value, max_nodes, ranking_method)
 
-    cmap = plt.get_cmap("PuRd") # set colormap for the nodes and connections
+    cmap = plt.get_cmap("spring") # set colormap for the nodes and connections
     node_colors = [] # makae a list to store the colors for each node
     number_of_nodes = len(nodes) # get the number of nodes
 
