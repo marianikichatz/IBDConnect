@@ -203,7 +203,10 @@ def create_circos_plot(filtered, mode, selected_value=None, max_nodes=50, rankin
         remove_same = temp_df['group1'].astype(str) < temp_df['group2'].astype(str)
 
     unique_connections = temp_df[remove_same] # set the unique connections as the rows without the duplicate connections
-    numm_connections = len(unique_connections) # get the number of unique connections 
+    num_conn = len(unique_connections) # get the number of unique connections 
+
+    if num_conn == 0:
+        return None, False, [], [], 0
 
     cmap = plt.get_cmap("spring") # set colormap for the nodes and connections
     node_colors = [] # makae a list to store the colors for each node

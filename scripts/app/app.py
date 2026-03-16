@@ -209,16 +209,21 @@ if generate:
        
         # create and display the circos plot
         with st.spinner("Generating circos plot, this may take a moment..."):
-            fig, big, nodes, node_colors, num_conn = create_circos_plot(filtered, mode, selected_value=use_value, max_nodes=max_nodes, ranking_method=ranking_method)
+            results = create_circos_plot(filtered, mode, selected_value=use_value, max_nodes=max_nodes, ranking_method=ranking_method)
 
-         # show how many connections are being plotted
-        st.write(f"Showing **{num_conn} IBD connections** for the selected filters.")
-        
-        st.pyplot(fig)
+        # if there are no connections we show a warning message 
+        if results[0] is None:
+            st.warning("No connections found for this specific selection. Try broadening your filters!")
+        # if there are connections we show the plot and the number of connections being plotted
+        else:
+            fig, big, nodes, node_colors, num_conn = results
+            # show how many connections are being plotted
+            st.write(f"Showing **{num_conn} IBD connections** for the selected filters.")
+            st.pyplot(fig)
 
-        fig.savefig("circos_plot.png", dpi=150, bbox_inches="tight")
-        with open("circos_plot.png", "rb") as f:
-            st.download_button("Download plot as PNG", f, "circos_plot.png", "image/png")
+            fig.savefig("circos_plot.png", dpi=150, bbox_inches="tight")
+            with open("circos_plot.png", "rb") as f:
+                st.download_button("Download plot as PNG", f, "circos_plot.png", "image/png")
 
         # if there are too many connections we show a message to the user 
         if big:
