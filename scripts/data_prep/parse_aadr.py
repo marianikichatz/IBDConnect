@@ -104,14 +104,12 @@ def parse_aadr_data(input_file):
     # read the excel file with the correct header row
     df = pd.read_excel(input_file, header=header_row)
 
+    # clean the data
     df['Political Entity'] = df['Political Entity'].astype(str).str.strip()
-    df['Political Entity'] = df['Political Entity'].str.replace('Gernamy', 'Germany', case=False)
+    df['Political Entity'] = df['Political Entity'].str.replace('Gernamy', 'Germany', case=False) # fix typo in country name
 
-    df['Group ID'] = df['Group ID'].astype(str).str.strip()
-    df['Group ID'] = df['Group ID'].str.split('_daughter').str[0]
-    df['Group ID'] = df['Group ID'].str.split('_son').str[0]
-    df['Group ID'] = df['Group ID'].str.split('_brother').str[0]
-    df['Group ID'] = df['Group ID'].str.split('_sister').str[0]
+    # clean the Group ID column by removing any suffixes that indicate family relationships and removing the .SG suffix that indicates shotgun sequencing data
+    df['Group ID'] = df['Group ID'].astype(str).str.strip().str.replace(r'[_.]?(mother|father|son|daughter|brother|sister|relative|rel).*', '', regex=True, case=False).str.replace(r'\.SG$', '', regex=True, case=False)
 
     # check if required columns are here
     required_columns = ['Genetic ID', 'Group ID', 'Political Entity']
