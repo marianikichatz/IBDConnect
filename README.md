@@ -47,6 +47,7 @@ bash scripts/requirements/install.sh
 
 # Scripts
 
+- `install.sh`: A shell script that installs the required Python libraries for the project using pip.
 - `parse_ibd.py`: A Python script that parses the IBD data and extracts the pairs of individuals and their corresponding IBD segment lengths in centiMorgans (cM). The script takes an input TSV file containing the IBD data and produces an output file with the parsed information.
 - `parse_aadr.py`: A Python script that parses the AADR data and converts it into a format with information about individuals and their population, country and year. The script takes an input Excel file containing the AADR data and produces an output file with the parsed information.
 - `build_database.py`: A Python script that takes the parsed IBD, metadata, and AADR files and builds a SQLite database. The script merges the information from the three input files based on the individual IDs and creates a database with a table containing the columns: ind1, group1, country1, year1, ind2, group2, country2, year2, and lengthM.
@@ -95,6 +96,9 @@ ancient_ibd_circos_visualizer/
 To run the pipeline, you can use the following commands in your terminal:
 
 ```bash
+# First, make sure to install the required dependencies
+bash scripts/requirements/install.sh
+# Pipeline to run the data parsing, database building, and start the Streamlit app
 # Step 1: Parse the IBD data
 python scripts/data_prep/parse_ibd.py data/ibd_data.tsv 
 # Step 2: Parse the AADR data
